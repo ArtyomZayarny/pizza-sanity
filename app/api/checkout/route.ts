@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { headers } from "next/headers";
 import { getStripe } from "@/lib/stripe";
 
 type CartItem = {
@@ -64,7 +65,10 @@ export async function POST(request: Request) {
     quantity: item.quantity,
   }));
 
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+  const headersList = await headers();
+  const host = headersList.get("host") || "localhost:3000";
+  const proto = headersList.get("x-forwarded-proto") || "http";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || `${proto}://${host}`;
 
   try {
     const session = await getStripe().checkout.sessions.create({
