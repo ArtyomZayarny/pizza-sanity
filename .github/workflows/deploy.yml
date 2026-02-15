@@ -1,3 +1,4 @@
+# Auto-deploy to Vercel on every push to main
 name: Deploy to Vercel
 on:
   push:
